@@ -1,0 +1,82 @@
+{% comment %} {% load static %}
+<img class="crop" src="{% static 'img/hero1.png'%}" draggable="false">
+
+<footer class="tm-bg-gray pt-5 pb-3 tm-text-gray tm-footer" style="border-top: solid; border-top-color: #002BA3;">
+    <div class="container-fluid tm-container-small">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'img/icon/logobaru.png'%}" >
+                </a>
+                {% comment %} <img src="{% static 'img/icon/logobaru.png'%}" alt=""> {% endcomment %}
+            {% comment %} </div>
+            <div class="col-lg-6 col-md-12 col-12 px-5 mb-5">
+                <h3 class="tm-text-primary mb-4 tm-footer-title">Tentang Modul Lidi</h3>
+                <p>Modul Lidi membantu penenun menghasilkan berbagai motif yang bervariasi hanya dengan menggunakan sedikit Lidi. Motif yang dihasilkan telah teruji mampu menciptakan hingga ratusan motif hanya dengan mengandalkan 8 jenis Lidi saja. Selain itu, motif ini dapat dengan pasti diterapkan pada kain tenun ulos.</p>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
+                <h3 class="tm-text-primary mb-4 tm-footer-title">Links</h3>
+                <ul class="tm-footer-links" style="list-style-type: none; padding-left: 0;">
+                    <li style="margin-bottom: 10px;"><a class="nav-link nav-link-1" href="{% url 'home' %}">Beranda</a></li>
+                    <li style="margin-bottom: 10px;"><a class="nav-link nav-link-2" href="{% url 'generator' %}">Generator</a></li>
+                    <li style="margin-bottom: 10px;"><a class="nav-link nav-link-3" href="{% url 'list1' %}">Motif</a></li>
+                    <li style="margin-bottom: 10px;"><a class="nav-link nav-link-4" href="{% url 'help' %}">Bantuan</a></li>
+                    <li style="margin-bottom: 10px;">
+                        <a class="nav-link nav-link-4" href="http://ulospedia.ditenun.com/">Ulospedia</a>
+                    </li>
+                    <li style="margin-bottom: 10px;">
+                        <a class="nav-link nav-link-4" href="http://webapp.ditenun.com/">WebApp</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer> {% endcomment %}
+
+{% load static %}
+<div class="footer-pattern">
+    <img src="{% static 'img/hero1.png' %}" draggable="false" style="width: 100%; height: 40px; object-fit: cover; display: block;">
+</div>
+
+<footer class="tm-bg-gray pt-5 pb-5 tm-text-gray tm-footer" style="border-top: 2px solid #002BA3; background-color: #eeeeee;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 d-flex align-items-start">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}" style="text-decoration: none;">
+                    <img src="{% static 'img/icon/NewTitle.png' %}" width="60" height="60" class="me-3">
+                    <div class="d-flex flex-column">
+                        <span style="font-weight: bold; font-size: 1.8rem; line-height: 0.9; color: #002BA3;">Modul</span>
+                        <span style="font-weight: bold; font-size: 1.8rem; line-height: 1.1; color: #002BA3;">Lidi</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- About Section -->
+            <div class="col-lg-6 col-md-12 mb-4 mb-lg-0 px-md-5">
+                <h3 class="font-weight-bold mb-3" style="color: #002BA3; font-size: 1.25rem;">Tentang Modul Lidi</h3>
+                <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                    Modul Lidi, bagian dari platform DiTenun, membantu penenun menghasilkan ratusan motif beragam hanya dengan menggunakan 8 jenis lidi. Motif-motif ini telah teruji dan dapat diterapkan secara akurat pada kain tenun ulos, memudahkan penenun menciptakan desain yang kaya dan bervariasi.
+                </p>
+            </div>
+
+            <!-- Links Section -->
+            <div class="col-lg-3 col-md-6">
+                <h3 class="font-weight-bold mb-3" style="color: #002BA3; font-size: 1.25rem;">Links</h3>
+                <ul class="list-unstyled" style="font-size: 0.9rem;">
+                    <li class="mb-2"><a href="{% url 'home' %}" class="text-secondary text-decoration-none hover-blue">Beranda</a></li>
+                    <li class="mb-2"><a href="{% url 'generator' %}" class="text-secondary text-decoration-none hover-blue">Generator</a></li>
+                    <li class="mb-2"><a href="{% url 'list1' %}" class="text-secondary text-decoration-none hover-blue">Motif</a></li>
+                    <li class="mb-2"><a href="{% url 'help' %}" class="text-secondary text-decoration-none hover-blue">Bantuan</a></li>
+                    <li class="mb-2"><a href="http://ulospedia.ditenun.com/" target="_blank" class="text-secondary text-decoration-none hover-blue">Ulospedia</a></li>
+                    <li class="mb-2"><a href="http://webapp.ditenun.com/" target="_blank" class="text-secondary text-decoration-none hover-blue">WebApp</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .hover-blue:hover {
+        color: #002BA3 !important;
+    }
+</style>

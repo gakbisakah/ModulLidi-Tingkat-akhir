@@ -1,0 +1,29 @@
+/venv
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Database
+db.sqlite3
+
+# Logs
+*.log
+
+# Django
+media/
+staticfiles/
+
+# OS / IDE
+.idea/
+.vscode/
+
+# Backup & random
+backup.*
+
+#Editor
+node_modules/

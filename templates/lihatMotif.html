@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Modul Lidi</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'img/icon/NewTitle.ico'%}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'templatemo-style.css'%}">
+    <link rel="stylesheet" href="{% static 'style.css'%}">
+    <link rel="stylesheet" href="{% static 'image.css'%}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <style>
+    .motif-grid {
+        display: block;
+        image-rendering: pixelated !important;
+        image-rendering: -moz-crisp-edges !important;
+        image-rendering: crisp-edges !important;
+        border: 1px solid #ddd;
+        background-color: white;
+        width: 100%;
+        height: auto;
+        margin: 15px auto;
+        object-fit: contain;
+        max-width: 1000px; /* PERUBAHAN: Samakan ukuran tampilan dengan motif gabungan */
+        max-height: 1000px; /* PERUBAHAN: Samakan ukuran tampilan dengan motif gabungan */
+    }
+
+    #redLineImage {
+       filter: contrast(220.3);
+        max-width: 1000px; /* PERUBAHAN: Samakan ukuran tampilan dengan motif gabungan */
+        max-height: 1000px; /* PERUBAHAN: Samakan ukuran tampilan dengan motif gabungan */
+        margin-left: auto; /* PERUBAHAN: Sentralisasi gambar untuk estetika */
+        margin-right: auto; /* PERUBAHAN: Sentralisasi gambar untuk estetika */
+        margin-top: 20px;
+    }
+
+    .motif-container {
+        text-align: center;
+        margin: 20px auto;
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .no-shadow-container {
+        box-shadow: none;
+    }
+    
+    .debug-path {
+        font-size: 12px;
+        color: #999;
+        margin-top: 5px;
+        padding: 5px;
+        background-color: #f8f9fa;
+        border-radius: 3px;
+        display: inline-block;
+    }
+    
+    .error-placeholder {
+        width: 100%;
+        max-width: 600px;
+        height: 200px;
+        background-color: #f8f9fa;
+        border: 1px dashed #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 15px auto;
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .centerline {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: red;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+    .grid-overlay {
+        position: relative;
+        grid-template-rows: repeat(20, 1fr); /* PERUBAHAN: Samakan grid untuk motif tunggal dengan gabungan */
+    }
+
+    .grid-overlay img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .grid-overlay::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        display: grid;
+        grid-template-columns: repeat(20, 1fr);
+        grid-template-rows: repeat(20, 1fr);
+        z-index: 20;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        background-size: calc(100% / 20) calc(100% / 20);
+    }
+
+    .text-muted {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+
+    #motifDetail .text-center {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+
+    #text_motif_asal, #text_motif_hasil {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+
+    .image-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        width: 100%;
+        height: auto;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        display: block;
+        object-fit: contain;
+    }
+
+    #motifDetail .container {
+        max-width: 130%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    #image-section {
+        width: 110%;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        align-items: center;
+    }
+
+    .row-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin: 0;
+        padding: 0;
+        line-height: 0;
+    }
+
+    #motifDetail.image-container {
+        width: 95%;
+        margin: 0;
+        padding: 0;
+        position: relative;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        margin: 0;
+        padding: 0;
+    }
+
+    .grid-lines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        pointer-events: none;
+        grid-template-columns: repeat(20, 1fr);
+        grid-template-rows: repeat(20, 1fr);
+    }
+
+    .grid-lines div {
+        border: 2px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .lidi {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 0.6rem;
+        line-height: 0;
+    }
+
+    .back-btn {
+        background-color: transparent;
+        border: 2px solid #002ba3;
+        border-radius: 0px;
+        padding: 12px 30px 14px;
+        font-size: 1rem;
+        color: #002ba3;
+        text-decoration: none;
+        display: inline-block;
+        width: 320px;
+    }
+
+    .back-btn:hover {
+        background-color: #e6e6ff;
+    }
+
+    .lidi-motif-asal {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 0.2rem;
+        line-height: 0;
+    }
+
+    .motif-btn {
+        background-color: #002BA3;
+        color: #fff;
+        width: 100%;
+        text-decoration: none;
+        border-radius: 0px;
+    }
+
+    .btn-spacing {
+        margin-top: 10px;
+    }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+
+    .motif-btn:hover {
+        background-color: #001f7a;
+    }
+
+    .lidi-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+        margin-top: 10px;
+    }
+    </style>
+</head>
+<body>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+
+    {% include "header.html" %}
+    
+    {% if error_messages %}
+    <div class="alert alert-danger">
+        {% for message in error_messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    <a href="{% url 'regenerate_motif' motif.id %}" class="btn btn-primary">Regenerate Motif</a>
+    {% endif %}
+
+    <!-- Tambahkan keterangan jika ini adalah motif gabungan -->
+    {% if motif.jenisGenerate == "combine" %}
+    <div class="alert alert-info">
+        <p><strong>Info:</strong> Ini adalah motif gabungan. Urutan lidi dan grid telah dihasilkan otomatis berdasarkan tinggi motif.</p>
+    </div>
+    {% endif %}
+    
+    <div id="motifDetail" class="container-fluid tm-container-content tm-mt-60">
+        <div class="row tm-mb-90">                     
+            <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12">
+                <h2 class="tm-text-primary text-center">Motif Asal</h2>
+                <div class="motif-container">
+                    <img id="lidiImage" class="motif-grid" alt="Motif Asal">
+                    <div id="lidiError" class="error-placeholder" style="display: none;">
+                        <div>Gambar motif tidak dapat dimuat</div>
+                    </div>
+                </div>
+                
+                <h2 class="tm-text-primary text-center mt-4">Hasil Motif</h2>
+                <div class="motif-container no-shadow-container image-container mt-4 mx-auto">
+                    <img id="redLineImage" class="motif-grid" alt="Hasil Motif" style="max-height: none; height: auto;">
+                    <div id="redLineError" class="error-placeholder" style="display: none;">
+                        <div>Gambar motif tidak dapat dimuat</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
+                <div class="tm-bg-gray tm-video-details">
+                    <div class="mb-4">
+                        <div class="text-center mb-3">
+                            <h5 class="tm-text-primary">Urutan Lidi Motif Asal</h5>
+                            {% if list_lidi_path %}
+                                <p class="tm-text-gray-dark">
+                                    {{ list_lidi_path|join:", " }}
+                                </p>
+                            {% else %}
+                                <p class="tm-text-gray-dark">Tidak tersedia</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="text-center mb-3">
+                            <h5 class="tm-text-primary">Urutan Lidi Hasil Motif</h5>
+                            <p class="tm-text-gray-dark" id="teks-urutan-lidi">{{motif.urutanLidi}}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 d-flex flex-wrap">
+                        <div class="mr-4 mb-2">
+                            <span class="tm-text-gray-dark">Nama Pembuat: </span>
+                            <span><a class="link" href="{% url 'tagUser' motif.user %}">{{motif.user}}</a> </span>
+                        </div>
+                    </div>
+                    <div class="mb-4 d-flex flex-wrap">
+                        <div class="mr-4 mb-2">
+                            <span class="tm-text-gray-dark">Tanggal: </span><a class="link" href="{% url 'tagTime' motif.time %}">{{ motif.time|date:"d-m-Y" }}</a>
+                        </div>
+                    </div>
+                    <div class="mb-4 d-flex flex-wrap">
+                        <div class="mr-4 mb-2">
+                            <span class="tm-text-gray-dark">Jenis Kain: </span><span class="link">{{ jenis_kain|default:"-" }}</span>
+                        </div>
+                    </div>
+                    <div class="mb-4 d-flex flex-wrap">
+                        <div class="mr-4 mb-2">
+                            <span class="tm-text-gray-dark">Jenis Produk: </span><span class="link">{{ jenis_produk|default:"-" }}</span>
+                        </div>
+                    </div>
+                    <div class="text-center mb-5">
+                        <a href="{{ motif.imgAfter|default:'' }}" class="btn btn-primary tm-btn-big motif-btn mb-4 btn-spacing" download>
+                            Unduh Hasil Motif
+                        </a>
+                        <a href="{{ motif.imgBefore|default:'' }}" class="btn btn-primary tm-btn-big motif-btn mb-4 btn-spacing" download>
+                            Unduh Motif Asal
+                        </a>
+                        <div class="text-center">
+                            <a href="{% url 'ubah_warna_combined' motif.id %}" class="btn btn-primary tm-btn-big motif-btn mt-3 mb-4 btn-spacing">
+                                Warnai Motif
+                            </a>
+                        </div>
+                        <!-- Full-Screen Editor Trigger -->
+                        <button type="button" class="btn btn-primary tm-btn-big motif-btn mb-4 btn-spacing" data-bs-toggle="modal" data-bs-target="#EditorModal">
+                            Edit Motif
+                        </button>
+                        {% if status %}
+                        <form action="/delete/" method="post" enctype="multipart/form-data" class="btn-spacing">
+                            {% csrf_token %}
+                            <div class="text-center">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" name="DeleteImage" value="{{ motif.id}}" required>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger tm-btn-big btn-block" data-bs-toggle="modal" data-bs-target="#ModalDelete" style="border-radius: 0px;">Hapus</button>
+                            <div class="modal fade" id="ModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" style="top: 50%;">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Konfirmasi hapus</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah anda yakin mengambil tindakan untuk menghapus motif ini?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-primary tm-btn-big" style="width: 100%;" data-bs-dismiss="modal">Batal</button>
+                                            <input type="submit" value="Hapus" id="DeleteForm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top: 10px; margin-bottom: 0;">
+                <a href="{% url 'list1' %}" class="back-btn">Kembali</a>
+            </div>
+        </div>
+    </div>
+    {% if status1 %}
+    {% else %}
+    <div class="row d-flex justify-content-center">
+        <div class="d-flex justify-content-center bd-highlight mb-3 example-parent" style="padding-top: 10%;">
+            <div class="col-md-10 col">
+                <h3 class="font-weight-bold ml-md-0 mx-auto text-center"> Akun Belum Diverifikasi oleh Admin </h3>
+                <p class="mt-md-4 ml-md-0 ml-2 text-center"> Silahkan menghubungi admin terkait untuk dapat menggunakan fitur generate motif</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endif %}
+    
+    {% include "footer.html" %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="{% static 'plugins.js'%}"></script>
+    <script>
+        $(window).on("load", function() {
+            $('body').addClass('loaded');
+            
+            
+            // ==========================================
+            // KODE PEMBERSIH ANGKA 0 PADA TEKS URUTAN LIDI
+            // ==========================================
+            const teksUrutanEl = document.getElementById("teks-urutan-lidi");
+            if (teksUrutanEl) {
+                const rawText = teksUrutanEl.textContent;
+                // Pecah teks jadi array, buang angka 0, gabungkan kembali
+                const cleanText = rawText
+                    .replace(/[\[\]]/g, '') // Hapus kurung siku jika ada
+                    .split(',')
+                    .map(num => parseInt(num.trim())) // Ubah teks jadi angka
+                    .filter(num => !isNaN(num) && num !== 0) // Saring (Buang angka 0)
+                    .join(', '); // Gabungkan lagi pakai koma
+                
+                teksUrutanEl.textContent = cleanText;
+            }
+            // ==========================================
+            
+            initializeImages();
+        });
+        
+        function initializeImages() {
+            var lidiPath = "{{ motif_asal }}";
+            var redLinePath = "{{ RedLine }}";
+            
+            console.log("Original Lidi Path:", lidiPath);
+            console.log("Original RedLine Path:", redLinePath);
+            
+            tryImagePaths("lidiImage", lidiPath, "lidiError");
+            
+            tryImagePaths("redLineImage", redLinePath, "redLineError");
+        }
+        
+        function tryImagePaths(imgId, originalPath, errorId) {
+            var img = document.getElementById(imgId);
+            var errorDiv = document.getElementById(errorId);
+            
+            var pathVariations = [
+                originalPath,
+                "/" + originalPath,
+                originalPath.replace(/^\//, ""),
+                "/media" + originalPath,
+                "/media/" + originalPath.replace(/^\//, ""),
+                "{% get_media_prefix %}" + originalPath.replace(/^\//, ""),
+                "/static" + originalPath,
+                "/static/" + originalPath.replace(/^\//, "")
+            ];
+            
+            var success = false;
+            var currentPathIndex = 0;
+            
+            function tryNextPath() {
+                if (currentPathIndex >= pathVariations.length) {
+                    console.error("Failed to load image after trying all path variations for", imgId);
+                    errorDiv.style.display = "flex";
+                    img.style.display = "none";
+                    return;
+                }
+                
+                var currentPath = pathVariations[currentPathIndex];
+                console.log("Trying path variation", currentPathIndex + 1, "for", imgId, ":", currentPath);
+                
+                img.src = currentPath;
+                currentPathIndex++;
+            }
+            
+            // FUNGSI ONLOAD UTAMA: Menangani Ragi Hotang (Ipon) & Menghapus Semua Grid/Garis Merah
+            img.onload = function() {
+                const jenisKain = "{{ jenis_kain|default:''|lower }}".trim().replace(" ", "_");
+                const container = img.parentElement;
+                
+                // ====================================================================
+                // 1. CEK RAGI HOTANG DAN SISIPKAN BADAN ULOS & IPON (HANYA PADA HASIL MOTIF)
+                // ====================================================================
+                if (jenisKain === "ragi_hotang" && img.id === "redLineImage" && !img.dataset.ragiHotangProcessed) {
+                    img.dataset.ragiHotangProcessed = "true"; // Flag agar onload tidak looping
+                    
+                    // --- Membaca Array Lidi dari Database (Angka 0) ---
+                    let urutanText = "{{ motif.urutanLidi|default:'[]' }}";
+                    let arrLidi = [];
+                    if (urutanText) {
+                        let cleaned = urutanText.replace(/[\[\]\s]/g, '');
+                        if (cleaned) arrLidi = cleaned.split(',').map(Number);
+                    }
+
+                    const totalLidiMurni = arrLidi.filter(x => x !== 0).length;
+                    const totalIpons = arrLidi.filter(x => x === 0).length;
+                    
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    
+                    const w = img.naturalWidth;
+                    const h = img.naturalHeight;
+                    
+                    // Tinggi area Ipon & Badan
+                    const gapBadan = Math.max(150, Math.floor(h * 0.2)); 
+                    const gapIpon = 25; 
+                    
+                    function drawBadan(yPos) {
+                        ctx.fillStyle = "#ffffff";
+                        ctx.fillRect(0, yPos, w, gapBadan);
+                        ctx.strokeStyle = "#002ba3";
+                        ctx.lineWidth = Math.max(2, Math.floor(w * 0.005));
+                        ctx.setLineDash([10, 10]);
+                        ctx.strokeRect(5, yPos + 5, w - 10, gapBadan - 10);
+                        ctx.setLineDash([]); 
+                        ctx.fillStyle = "#002ba3";
+                        ctx.font = `bold ${Math.max(14, Math.floor(w * 0.035))}px Arial`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText("Bagian Badan Ulos (Kreasi Bebas)", w / 2, yPos + (gapBadan / 2));
+                    }
+                    
+                    function drawIpon(yPos) {
+                        ctx.fillStyle = "#ffffff";
+                        ctx.fillRect(0, yPos, w, gapIpon);
+                        ctx.strokeStyle = "#002ba3"; 
+                        ctx.lineWidth = Math.max(1.5, Math.floor(w * 0.004));
+                        ctx.setLineDash([8, 8]);
+                        ctx.strokeRect(5, yPos + 3, w - 10, gapIpon - 6);
+                        ctx.setLineDash([]);
+                        ctx.fillStyle = "#002ba3";
+                        ctx.font = `bold ${Math.max(12, Math.floor(w * 0.03))}px Arial`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText("Ipon (Kreasi Bebas)", w / 2, yPos + (gapIpon / 2));
+                    }
+
+                    // Eksekusi potong gambar dan sisip Ipon/Badan Ulos
+                    if (totalLidiMurni > 0 && totalLidiMurni % 2 === 0) {
+                        canvas.width = w;
+                        canvas.height = h + gapBadan + (totalIpons * gapIpon);
+                        
+                        const halfLidi = totalLidiMurni / 2;
+                        const lidiHeight = h / totalLidiMurni; 
+                        
+                        let sourceY = 0; 
+                        let destY = 0;   
+                        let cumulativeLidi = 0;
+                        let currentBlockSize = 0;
+                        
+                        for (let i = 0; i < arrLidi.length; i++) {
+                            if (arrLidi[i] === 0) { 
+                                if (currentBlockSize > 0) {
+                                    let sliceH = currentBlockSize * lidiHeight;
+                                    ctx.drawImage(img, 0, sourceY, w, sliceH, 0, destY, w, sliceH);
+                                    sourceY += sliceH;
+                                    destY += sliceH;
+                                    cumulativeLidi += currentBlockSize;
+                                    
+                                    if (cumulativeLidi === halfLidi) {
+                                        drawBadan(destY);
+                                        destY += gapBadan;
+                                    }
+                                    currentBlockSize = 0;
+                                }
+                                drawIpon(destY);
+                                destY += gapIpon;
+                            } 
+                            else { 
+                                currentBlockSize++;
+                                if (cumulativeLidi + currentBlockSize === halfLidi) {
+                                    let sliceH = currentBlockSize * lidiHeight;
+                                    ctx.drawImage(img, 0, sourceY, w, sliceH, 0, destY, w, sliceH);
+                                    sourceY += sliceH;
+                                    destY += sliceH;
+                                    cumulativeLidi += currentBlockSize;
+                                    
+                                    drawBadan(destY);
+                                    destY += gapBadan;
+                                    currentBlockSize = 0;
+                                }
+                            }
+                        }
+                        
+                        if (currentBlockSize > 0) {
+                            let sliceH = currentBlockSize * lidiHeight;
+                            ctx.drawImage(img, 0, sourceY, w, sliceH, 0, destY, w, sliceH);
+                        }
+                        
+                    } else {
+                        // Fallback aman: Belah tengah saja
+                        const halfH = h / 2;
+                        canvas.width = w;
+                        canvas.height = h + gapBadan;
+                        
+                        ctx.drawImage(img, 0, 0, w, halfH, 0, 0, w, halfH);
+                        drawBadan(halfH);
+                        ctx.drawImage(img, 0, halfH, w, halfH, 0, halfH + gapBadan, w, halfH);
+                    }
+                    
+                    // Update sumber gambar dengan hasil canvas yang sudah disisipi
+                    const newImageData = canvas.toDataURL("image/png");
+                    img.src = newImageData;
+                    
+                    // Update tombol Unduh
+                    const downloadLinks = document.querySelectorAll("a[download]");
+                    downloadLinks.forEach(link => {
+                        if (link.innerText.includes("Unduh Hasil Motif")) {
+                            link.href = newImageData;
+                            link.download = "Hasil_Motif_Ragi_Hotang.png"; 
+                        }
+                    });
+                    
+                    return; // Keluar dari onload sementara gambar baru dimuat ulang
+                }
+
+                // ====================================================================
+                // 2. TAMPILAN NORMAL (Untuk Motif Asal, dan Hasil Motif Selain Ragi Hotang)
+                // ====================================================================
+                success = true;
+                const errorDiv = document.getElementById(img.id === "lidiImage" ? "lidiError" : "redLineError");
+                if(errorDiv) errorDiv.style.display = "none";
+                
+                img.style.display = "block";
+                img.classList.add("loaded");
+                
+                // Hapus overlay lama jika ada (berjaga-jaga agar layar selalu bersih)
+                const oldOverlay = container.querySelector('.custom-grid-overlay');
+                if (oldOverlay) oldOverlay.remove();
+                
+                // SELESAI. Kita tidak menambahkan grid atau garis merah apa pun di sini.
+            };
+            
+            img.onerror = function() {
+                console.error("Failed to load image with path:", img.src);
+                tryNextPath();
+            };
+            
+            tryNextPath();
+        }
+        
+        function openModal(img) {
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var namaGambar = img.dataset.namaGambar;
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            var teksLama = document.querySelector("#myModal p");
+            teksLama.textContent = namaGambar;
+        }
+        
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+    </script>
+
+    <!-- Editor Modal (Integrasi Tanpa Pindah Halaman) -->
+    <div class="modal fade" id="EditorModal" tabindex="-1" aria-labelledby="EditorModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: #f8fafc;">
+                <div class="modal-body p-0 overflow-hidden" style="height: 100vh;">
+                    <iframe 
+                        src="http://localhost:3000/?id={{ motif.id }}" 
+                        style="width: 100%; height: 100%; border: none;"
+                        id="editorFrame"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    <script>
+        // Listen for messages from the Editor Iframe (Cross-Origin Safe)
+        window.addEventListener('message', function(event) {
+            if (event.data === 'REFRESH_PARENT') {
+                console.log('Refresh signal received from editor');
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>
